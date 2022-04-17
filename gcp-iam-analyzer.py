@@ -120,7 +120,7 @@ def perms_all(all_roles):
     perms_shared(all_roles)
 
 
-def refresh():
+def roles_refresh():
     """
     This function:
         - Downloads the most recent GCP IAM roles dataset
@@ -132,7 +132,6 @@ def refresh():
         # Get the latest release tag URL
         logging.info("Downloading latest GCP IAM roles dataset... \n")
         response = requests.get("https://api.github.com/repos/jdyke/gcp_iam_update_bot/releases/latest")
-        logging.error("Could not get latest GitHub release tag. Exiting.. \n")
 
         # Construct the tarball download URL
         tarball_name = response.json()["tag_name"]
@@ -227,7 +226,7 @@ if __name__ == "__main__":
     # Check if user wants to download or refresh roles folder.
     if args["refresh"]:
         logging.info("Refresh flag set, will refresh local \"roles\" folder and continue..")
-        refresh()
+        roles_refresh()
     
     # Require at least one argument
     if not args["diff"] and not args["shared"] and not args["all"]:
@@ -246,7 +245,7 @@ if __name__ == "__main__":
         # Ask user if they want to dl roles folder
         refresh = input("Do you want to download the \"roles\" folder now? y/n \n") 
         if refresh == "y":
-            refresh()
+            roles_refresh()
         elif refresh == "n":
             logging.info("\"roles\" folder is required for analysis. Please execute with -r flag.")
         else:
