@@ -58,3 +58,7 @@ The above output shows that by assigning the `vpcaccess.viewer` role and removin
 'vpcaccess.connectors.delete',
 'vpcaccess.connectors.use'
  ```
+ 
+ ## Feedback
+ 
+ Feel free to open an issue if you encounter a bug or reach out via twitter [@jasonadyke](https://twitter.com/jasonadyke)
