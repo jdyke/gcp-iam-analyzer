@@ -57,15 +57,24 @@ def perms_diff(diff_roles):
 
     # Get the diff for role1
     role_one_diff = set(role_one_perms).difference(set(role_two_perms))
+    print(f"Role \"{role_one}\" differences:")
     if not role_one_diff:
         role_one_diff = "N/A"
-    print(f"Role \"{role_one}\" differences:")
-    pprint(role_one_diff)
+        pprint(role_one_diff)
+    else:
+        for permission in role_one_diff:
+            pprint(permission)
 
     # Get the diff for role2
     role_two_diff = set(role_two_perms).difference(set(role_one_perms))
+
     print(f"Role \"{role_two}\" differences:")
-    pprint(role_two_diff)
+    if not role_two_diff:
+        role_two_diff = "N/A"
+        pprint(role_two_diff)
+    else:
+        for permission in role_two_diff:
+            pprint(permission)
 
 
 def get_permissions(role_name):
