@@ -32,15 +32,18 @@ def inputs(args):
             perms_shared(shared_roles)
     if args["all"]:
         if len(args["all"]) != 2:
-            logging.error("Need 2 roles to compare both different and shared permissions..")
+            logging.error(
+                "Need 2 roles to compare both different and shared permissions..")
             logging.error("Please rerun with 2 roles. Exiting. \n")
             sys.exit(1)
         else:
-            logging.info("All flag set, will output diff and shared permissions. \n")
+            logging.info(
+                "All flag set, will output diff and shared permissions. \n")
             all_roles = args["all"]
             perms_all(all_roles)
     if args["list"]:
-        logging.info("List flag set, will output permissions for supplied role(s). \n")
+        logging.info(
+            "List flag set, will output permissions for supplied role(s). \n")
         list_roles = args["list"]
         list_perms(list_roles)
 
@@ -109,7 +112,8 @@ def perms_shared(shared_roles):
 
     # Compare the two lists and display similarities
     shared_perms = set(role_one_perms) & set(role_two_perms)
-    print(f"# The shared permissions between {role_one} and {role_two} are: \n")
+    print(
+        f"# The shared permissions between {role_one} and {role_two} are: \n")
     pprint(shared_perms)
 
 
@@ -135,7 +139,8 @@ def roles_refresh():
     try:
         # Get the latest release tag URL
         logging.info("Downloading latest GCP IAM roles dataset... \n")
-        response = requests.get("https://api.github.com/repos/jdyke/gcp_iam_update_bot/releases/latest")
+        response = requests.get(
+            "https://api.github.com/repos/jdyke/gcp_iam_update_bot/releases/latest")
 
         # Construct the tarball download URL
         tarball_name = response.json()["tag_name"]
@@ -232,25 +237,33 @@ def members(tarball):
 if __name__ == "__main__":
     # Configure logging format
     # TODO: Update to info logging
-    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.ERROR)
+    logging.basicConfig(format='%(levelname)s:%(message)s',
+                        level=logging.ERROR)
 
     # Configure arguments
-    parser = argparse.ArgumentParser(description="Compares GCP IAM roles and outputs analysis.")
-    parser.add_argument("-d", "--diff", nargs='+', metavar="ROLES", help="Compares roles and outputs the permissions difference.")
-    parser.add_argument("-s", "--shared", nargs='+', metavar="ROLES", help="Compares roles and outputs the shared permissions.")
-    parser.add_argument("-a", "--all", nargs='+', metavar="ROLES", help="Compares roles and outputs the differences and the shared permissins.")
-    parser.add_argument("-l", "--list", nargs='+', metavar="ROLES", help="Lists permissions for role(s).")
-    parser.add_argument("-r", "--refresh", help="Refreshes the local \"roles\" folder.", action='store_true')
+    parser = argparse.ArgumentParser(
+        description="Compares GCP IAM roles and outputs analysis.")
+    parser.add_argument("-d", "--diff", nargs='+', metavar="ROLES",
+                        help="Compares roles and outputs the permissions difference.")
+    parser.add_argument("-s", "--shared", nargs='+', metavar="ROLES",
+                        help="Compares roles and outputs the shared permissions.")
+    parser.add_argument("-a", "--all", nargs='+', metavar="ROLES",
+                        help="Compares roles and outputs the differences and the shared permissins.")
+    parser.add_argument("-l", "--list", nargs='+',
+                        metavar="ROLES", help="Lists permissions for role(s).")
+    parser.add_argument(
+        "-r", "--refresh", help="Refreshes the local \"roles\" folder.", action='store_true')
 
     args = vars(parser.parse_args())
 
     # Check if user wants to download or refresh roles folder.
     if args["refresh"]:
-        logging.info("Refresh flag set, will refresh local \"roles\" folder and continue..")
+        logging.info(
+            "Refresh flag set, will refresh local \"roles\" folder and continue..")
         roles_refresh()
 
     # Require at least one argument
-    if not args["diff"] and not args["shared"] and not args["all"] and not args["list"] :
+    if not args["diff"] and not args["shared"] and not args["all"] and not args["list"]:
         logging.error("One argument must be supplied.")
         sys.exit(0)
 
@@ -261,15 +274,19 @@ if __name__ == "__main__":
     if is_folder:
         logging.debug("Roles folder exists.. proceeding")
     else:
-        logging.error("\"roles\" folder does not exist. This is required for analysis.")
+        logging.error(
+            "\"roles\" folder does not exist. This is required for analysis.")
 
         # Ask user if they want to dl roles folder
-        refresh = input("Do you want to download the \"roles\" folder now? y/n \n")
+        refresh = input(
+            "Do you want to download the \"roles\" folder now? y/n \n")
         if refresh == "y":
             roles_refresh()
         elif refresh == "n":
-            logging.info("\"roles\" folder is required for analysis. Please execute with -r flag.")
+            logging.info(
+                "\"roles\" folder is required for analysis. Please execute with -r flag.")
         else:
-            logging.error(f"Invalid or no input found. Value entered: \"{refresh}\"")
+            logging.error(
+                f"Invalid or no input found. Value entered: \"{refresh}\"")
 
     inputs(args)
