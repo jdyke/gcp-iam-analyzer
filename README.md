@@ -5,7 +5,7 @@ I wrote this to help in my day to day working in GCP. A lot of the time I am doi
 Compares and analyzes GCP IAM roles. Currently supports 2 role comparisons to find:
 - The differences between the two.
 - Which permissions the two roles share.
-- Lists permissions for a given role or list of roles.
+- Lists permissions for a given role or list of roles. (supports 1 + N roles)
 - Can output differences and shared permissions in the same flow.
 
 In order to determine what permissions a role has we need some type of role -> permission lookup. Luckily, I already have that via a different project [gcp_iam_update_bot](https://github.com/jdyke/gcp_iam_update_bot) which keeps an up to date list of ALL GCP IAM roles and their permissions (refreshes every 12 hours).
@@ -20,7 +20,6 @@ Do you want to download the "roles" folder now? y/n
 Otherwise you can always re-update your local roles database via `./gcp-iam-analyzer.py -r`.
 
 ## Execution:
-
 ```
 ./gcp-iam-analyzer.py --help
 usage: gcp-iam-analyzer.py [-h] [-d ROLES [ROLES ...]] [-s ROLES [ROLES ...]] [-a ROLES [ROLES ...]] [-l ROLES [ROLES ...]] [-r]
