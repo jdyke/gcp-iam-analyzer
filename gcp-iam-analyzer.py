@@ -261,6 +261,10 @@ if __name__ == "__main__":
         logging.info(
             "Refresh flag set, will refresh local \"roles\" folder and continue..")
         roles_refresh()
+        print("Roles directory updated. \n")
+        if not args["diff"] and not args["shared"] and not args["all"] and not args["list"]:
+            print("Exiting - no further action requested.")
+            sys.exit(0)
 
     # Require at least one argument
     if not args["diff"] and not args["shared"] and not args["all"] and not args["list"]:
