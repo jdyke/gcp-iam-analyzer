@@ -89,11 +89,17 @@ def get_permissions(role_name):
     Takes a role and finds the permissions it contains
     """
     # Create a list of permissions for a given role
-    with open(f"./roles/{role_name}", "r") as role_file:
-        role_file = json.load(role_file)
-        role_perms = role_file["includedPermissions"]
+    try:
+        with open(f"./roles/{role_name}", "r") as role_file:
+            role_file = json.load(role_file)
+            role_perms = role_file["includedPermissions"]
 
-    return role_perms
+            return role_perms
+    
+    except FileNotFoundError as file_err:
+        logging.error(f"Role not found. Check your spelling.")
+        logging.debug(file_err)
+        sys.exit(1)
 
 
 def perms_shared(shared_roles):
