@@ -118,9 +118,13 @@ def perms_shared(shared_roles):
 
     # Compare the two lists and display similarities
     shared_perms = set(role_one_perms) & set(role_two_perms)
-    print(
-        f"# The shared permissions between {role_one} and {role_two} are: \n")
-    pprint(shared_perms)
+    if shared_perms:
+        print(
+            f"# The shared permissions between {role_one} and {role_two} are: \n")
+        for perms in shared_perms:
+            pprint(perms)
+    else:
+        print("\n There are no shared permissions.")
 
 
 def perms_all(all_roles):
@@ -188,7 +192,8 @@ def list_perms(list_roles):
     for role in list_roles:
         perms_list = get_permissions(role)
         print(f"# The permissions for {role} are:")
-        pprint(perms_list)
+        for perm in perms_list:
+            pprint(perm)
 
 
 def move_directory(move_dir):
