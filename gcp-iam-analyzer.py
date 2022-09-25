@@ -104,7 +104,7 @@ def get_permissions(role_name):
                 role_perms = []
 
             return role_perms
-    
+
     except FileNotFoundError as file_err:
         logging.error(f"Role not found. Check your spelling.")
         logging.debug(file_err)
@@ -204,10 +204,11 @@ def list_perms(list_roles):
         for perm in perms_list:
             pprint(perm)
 
+
 def list_roles_for_perm(role_permission):
     """
     Lists all known GCP IAM roles that contain a specific permission.
-    
+
     Args:
         role_permission (str): A GCP IAM permission.
     """
@@ -220,20 +221,21 @@ def list_roles_for_perm(role_permission):
     if validated:
         all_roles_names = get_all_role_names()
     else:
-        logging.error("All IAM permissions must be formatted \"service.resource.action\"")
+        logging.error(
+            "All IAM permissions must be formatted \"service.resource.action\"")
         logging.error(f"You entered: {role_permission}")
         sys.exit(1)
-    
+
     # Empty list which we will add roles with permission to
     roles_with_perm = []
 
     # For each role name in our roles/ directory
     for role_name in all_roles_names:
-       # We first get the list of permissions in the role
-       role_perms =  get_permissions(role_name)
-       # Then we check for the specific permission in the list
-       if role_permission in role_perms:
-        roles_with_perm.append(role_name)
+        # We first get the list of permissions in the role
+        role_perms = get_permissions(role_name)
+        # Then we check for the specific permission in the list
+        if role_permission in role_perms:
+            roles_with_perm.append(role_name)
 
     # If there are roles with the specific permission
     if roles_with_perm:
@@ -248,11 +250,11 @@ def list_roles_for_perm(role_permission):
 def permission_validation(role_permission):
     """
     Check the permission for 2 periods which is the IAM permission
-    format. 
-    
+    format.
+
     The format should always match "service.resource.action"
     ^^ statement is true as of Sept 25, 2022
-    
+
     Args:
         role_permission (str): A GCP IAM permission.
     """
