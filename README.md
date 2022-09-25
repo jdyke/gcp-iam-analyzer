@@ -8,6 +8,7 @@ Compares and analyzes GCP IAM roles. Currently supports 2 role comparisons to fi
 
 - The differences between the two.
 - Which permissions the two roles share.
+- Which roles have a specific permission
 - Lists permissions for a given role or list of roles. (supports 1 + N roles)
 - Can output differences and shared permissions in the same flow.
 
@@ -27,7 +28,8 @@ Otherwise you can always re-update your local roles database via `./gcp-iam-anal
 
 ```bash
 ./gcp-iam-analyzer.py --help
-usage: gcp-iam-analyzer.py [-h] [-d ROLES [ROLES ...]] [-s ROLES [ROLES ...]] [-a ROLES [ROLES ...]] [-l ROLES [ROLES ...]] [-r]
+usage: gcp-iam-analyzer.py [-h] [-d ROLES [ROLES ...]] [-s ROLES [ROLES ...]] [-a ROLES [ROLES ...]]
+                           [-l ROLES [ROLES ...]] [-p PERM [PERM ...]] [-r]
 
 Compares GCP IAM roles and outputs analysis.
 
@@ -41,7 +43,9 @@ optional arguments:
                         Compares roles and outputs the differences and the shared permissins.
   -l ROLES [ROLES ...], --list ROLES [ROLES ...]
                         Lists permissions for role(s).
-  -r, --refresh         Refreshes the local "roles" folder.
+  -p PERM [PERM ...], --perm PERM [PERM ...]
+                        Lists roles which contain a specific permission.
+  -r, --refresh         Refreshes the local "roles" folder
 ```
 
 ## Example
