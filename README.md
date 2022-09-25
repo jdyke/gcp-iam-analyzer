@@ -1,16 +1,28 @@
 # GCP IAM Analyzer
 
-I wrote this to help in my day to day working in GCP. A lot of the time I am doing role comparisons to see which role has more permissions, what the differences are, etc.
+This tool is an all-in-one GCP IAM analyzer with helpful functions for working with roles and permissions.
+
+## Table of Contents
+
+- [Features](#features)
+  - [Role Analysis](#role-analysis)
+  - [Permissions Analysis](#permissions-analysis)
+- [Usage](#usage)
+- [Example](#example)
+- [Feedback](#feedback)
 
 ## Features
 
-Compares and analyzes GCP IAM roles. Currently supports 2 role comparisons to find:
+There are two main types of features this tool offers: role analysis and permissions analysis. 
 
-- The differences between the two.
-- Which permissions the two roles share.
-- Which roles have a specific permission
-- Lists permissions for a given role or list of roles. (supports 1 + N roles)
-- Can output differences and shared permissions in the same flow.
+### Role Analysis
+
+Currently supports up to 2 IAM roles to:
+
+- Calculate the differences in permissions between the two. (`-d` flag)
+- Which permissions the two roles share. (`-s` flag)
+- Lists permissions for a given role or list of roles. (supports 1 + N roles). (`-l` flag)
+- Or can do all of the above at once. (`-a` flag)
 
 In order to determine what permissions a role has we need some type of role -> permission lookup. We have a roles database via a different project [gcp_iam_update_bot](https://github.com/jdyke/gcp_iam_update_bot) which keeps an up to date list of all GCP IAM roles and their permissions (refreshes every 12 hours).
 
@@ -22,9 +34,13 @@ ERROR:"roles" folder does not exist. This is required for analysis.
 Do you want to download the "roles" folder now? y/n
 ```
 
-Otherwise you can always re-update your local roles database via `./gcp-iam-analyzer.py -r`.
+You update your local roles database at anytime via `./gcp-iam-analyzer.py -r`.
 
-## Execution
+### Permissions Analysis
+
+- Can calculate which IAM roles have a specific IAM permission. (`-p` flag)
+
+## Usage
 
 ```bash
 ./gcp-iam-analyzer.py --help
