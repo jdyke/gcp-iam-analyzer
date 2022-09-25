@@ -64,7 +64,7 @@ def perms_diff(diff_roles):
 
     # Get the diff for role1
     role_one_diff = set(role_one_perms).difference(set(role_two_perms))
-    print(f"# Role \"{role_one}\" differences:")
+    print(f"\n # Role \"{role_one}\" differences:")
     if not role_one_diff:
         role_one_diff = "N/A"
         pprint(role_one_diff)
@@ -75,7 +75,7 @@ def perms_diff(diff_roles):
     # Get the diff for role2
     role_two_diff = set(role_two_perms).difference(set(role_one_perms))
 
-    print(f"# Role \"{role_two}\" differences:")
+    print(f"\n # Role \"{role_two}\" differences:")
     if not role_two_diff:
         role_two_diff = "N/A"
         pprint(role_two_diff)
@@ -120,7 +120,7 @@ def perms_shared(shared_roles):
     shared_perms = set(role_one_perms) & set(role_two_perms)
     if shared_perms:
         print(
-            f"# The shared permissions between {role_one} and {role_two} are: \n")
+            f"\n # The shared permissions between {role_one} and {role_two} are: \n")
         for perms in shared_perms:
             pprint(perms)
     else:
@@ -247,7 +247,6 @@ def members(tarball):
 
 if __name__ == "__main__":
     # Configure logging format
-    # TODO: Update to info logging
     logging.basicConfig(format='%(levelname)s:%(message)s',
                         level=logging.ERROR)
 
