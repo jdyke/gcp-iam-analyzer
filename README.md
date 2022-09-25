@@ -11,7 +11,7 @@ Compares and analyzes GCP IAM roles. Currently supports 2 role comparisons to fi
 - Lists permissions for a given role or list of roles. (supports 1 + N roles)
 - Can output differences and shared permissions in the same flow.
 
-In order to determine what permissions a role has we need some type of role -> permission lookup. Luckily, I already have that via a different project [gcp_iam_update_bot](https://github.com/jdyke/gcp_iam_update_bot) which keeps an up to date list of ALL GCP IAM roles and their permissions (refreshes every 12 hours).
+In order to determine what permissions a role has we need some type of role -> permission lookup. We have a roles database via a different project [gcp_iam_update_bot](https://github.com/jdyke/gcp_iam_update_bot) which keeps an up to date list of all GCP IAM roles and their permissions (refreshes every 12 hours).
 
 Before any role analysis takes place the script will look for the `roles/` directory and prompt you to download it if it does not exist:
 
@@ -69,4 +69,4 @@ The above output shows that by assigning the `vpcaccess.viewer` role and removin
 
 ## Feedback
 
- Feel free to open an issue if you encounter a bug or reach out via twitter [@jasonadyke](https://twitter.com/jasonadyke)
+Feel free to open an issue if you encounter a bug or reach out via twitter [@jasonadyke](https://twitter.com/jasonadyke)
