@@ -46,6 +46,11 @@ def inputs(args):
             "List flag set, will output permissions for supplied role(s). \n")
         list_roles = args["list"]
         list_perms(list_roles)
+    if args["perm"]:
+        logging.info(
+            "Permission flag set, will output all roles which contain the supplied permission. \n")
+        role_permission = str(args["perm"][0])
+        list_roles_for_perm(role_permission)
 
 
 def perms_diff(diff_roles):
@@ -92,7 +97,11 @@ def get_permissions(role_name):
     try:
         with open(f"./roles/{role_name}", "r") as role_file:
             role_file = json.load(role_file)
-            role_perms = role_file["includedPermissions"]
+            # Some roles do not have this key
+            if "includedPermissions" in role_file:
+                role_perms = role_file["includedPermissions"]
+            else:
+                role_perms = []
 
             return role_perms
     
@@ -195,6 +204,77 @@ def list_perms(list_roles):
         for perm in perms_list:
             pprint(perm)
 
+def list_roles_for_perm(role_permission):
+    """
+    Lists all known GCP IAM roles that contain a specific permission.
+    
+    Args:
+        role_permission (str): A GCP IAM permission.
+    """
+
+    # Before performing role analysis validate the permission
+    # is formatted correctly
+    validated = permission_validation(role_permission)
+
+    # If permission is properly formatted get list of roles to analyze
+    if validated:
+        all_roles_names = get_all_role_names()
+    else:
+        logging.error("All IAM permissions must be formatted \"service.resource.action\"")
+        logging.error(f"You entered: {role_permission}")
+        sys.exit(1)
+    
+    # Empty list which we will add roles with permission to
+    roles_with_perm = []
+
+    # For each role name in our roles/ directory
+    for role_name in all_roles_names:
+       # We first get the list of permissions in the role
+       role_perms =  get_permissions(role_name)
+       # Then we check for the specific permission in the list
+       if role_permission in role_perms:
+        roles_with_perm.append(role_name)
+
+    # If there are roles with the specific permission
+    if roles_with_perm:
+        print(f"# The roles with the \"{role_permission}\" permission are: \n")
+        for role in roles_with_perm:
+            pprint(role)
+    else:
+        print(f"No roles found with permission \"{role_permission}\"")
+        print("Check your spelling and capitalization.")
+
+
+def permission_validation(role_permission):
+    """
+    Check the permission for 2 periods which is the IAM permission
+    format. 
+    
+    The format should always match "service.resource.action"
+    ^^ statement is true as of Sept 25, 2022
+    
+    Args:
+        role_permission (str): A GCP IAM permission.
+    """
+
+    num_periods = role_permission.count(".")
+    if num_periods == 2:
+        return True
+
+
+def get_all_role_names():
+    """
+    Gets a list of all IAM role names
+    """
+
+    try:
+        role_names = os.listdir("roles/")
+    except:
+        logging.error("Could not list the \"roles/\" directory")
+        raise
+
+    return role_names
+
 
 def move_directory(move_dir):
     """
@@ -261,6 +341,8 @@ if __name__ == "__main__":
                         help="Compares roles and outputs the differences and the shared permissins.")
     parser.add_argument("-l", "--list", nargs='+',
                         metavar="ROLES", help="Lists permissions for role(s).")
+    parser.add_argument("-p", "--perm", nargs='+',
+                        metavar="PERM", help="Lists roles which contain a specific permission.")
     parser.add_argument(
         "-r", "--refresh", help="Refreshes the local \"roles\" folder.", action='store_true')
 
@@ -277,7 +359,7 @@ if __name__ == "__main__":
             sys.exit(0)
 
     # Require at least one argument
-    if not args["diff"] and not args["shared"] and not args["all"] and not args["list"]:
+    if not args["diff"] and not args["shared"] and not args["all"] and not args["list"] and not args["perm"]:
         logging.error("One argument must be supplied.")
         sys.exit(0)
 
@@ -293,10 +375,10 @@ if __name__ == "__main__":
 
         # Ask user if they want to dl roles folder
         refresh = input(
-            "Do you want to download the \"roles\" folder now? y/n \n")
+            "Do you want to download the \"roles\" folder now? y/N \n")
         if refresh == "y":
             roles_refresh()
-        elif refresh == "n":
+        elif refresh == "N":
             logging.info(
                 "\"roles\" folder is required for analysis. Please execute with -r flag.")
         else:
