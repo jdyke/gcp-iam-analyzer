@@ -247,7 +247,7 @@ def list_roles_for_perm(role_permission):
 
     # If there are roles with the specific permission
     if roles_with_perm:
-        print(f"# The roles with the \"{role_permission}\" permission are: \n")
+        print(f"\n # The roles with the \"{role_permission}\" permission are: \n")
         for role in roles_with_perm:
             pprint(role)
     else:
