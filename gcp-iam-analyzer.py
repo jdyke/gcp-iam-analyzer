@@ -9,6 +9,7 @@ import sys
 import shutil
 import json
 from pprint import pprint
+import re
 
 
 def inputs(args):
@@ -48,9 +49,13 @@ def inputs(args):
         list_perms(list_roles)
     if args["perm"]:
         logging.info(
-            "Permission flag set, will output all roles which contain the supplied permission. \n")
-        role_permission = str(args["perm"][0])
-        list_roles_for_perm(role_permission)
+            "Permission flag set, will output all roles which contain the supplied permission(s). \n")
+        if len(args["perm"]) == 1:
+            role_permission = str(args["perm"][0])
+            list_roles_for_perm(role_permission)
+        else:
+            for permission in args["perm"]:
+                list_roles_for_perm(permission)
 
 
 def perms_diff(diff_roles):
@@ -226,6 +231,9 @@ def list_roles_for_perm(role_permission):
         logging.error(f"You entered: {role_permission}")
         sys.exit(1)
 
+    # Before finding roles remove special characters other than periods
+    role_permission = format_permission(role_permission)
+
     # Empty list which we will add roles with permission to
     roles_with_perm = []
 
@@ -239,7 +247,7 @@ def list_roles_for_perm(role_permission):
 
     # If there are roles with the specific permission
     if roles_with_perm:
-        print(f"# The roles with the \"{role_permission}\" permission are: \n")
+        print(f"\n # The roles with the \"{role_permission}\" permission are: \n")
         for role in roles_with_perm:
             pprint(role)
     else:
@@ -262,6 +270,20 @@ def permission_validation(role_permission):
     num_periods = role_permission.count(".")
     if num_periods == 2:
         return True
+
+
+def format_permission(role_permission):
+    """
+    Look for commas and remove.
+    This is useful if a user passes in a list of permissions with commas
+
+    Args:
+        role_permission (str): A GCP IAM permission.
+    """
+
+    new_permission = re.sub(r",", "", role_permission)
+
+    return new_permission
 
 
 def get_all_role_names():

@@ -38,7 +38,7 @@ You update your local roles database at anytime via `./gcp-iam-analyzer.py -r`.
 
 ### Permissions Analysis
 
-- Can calculate which IAM roles have a specific IAM permission. (`-p` flag)
+- Will calculate which IAM roles have N + 1 IAM permissions. This is useful if you'd like to know which roles share similar permissions. (`-p` flag)
 
 ## Usage
 
