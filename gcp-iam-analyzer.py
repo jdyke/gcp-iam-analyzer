@@ -101,7 +101,10 @@ def get_permissions(role_name):
     # Create a list of permissions for a given role
     try:
         with open(f"./roles/{role_name}", "r") as role_file:
-            role_file = json.load(role_file)
+            try:
+                role_file = json.load(role_file)
+            except:
+                logging.error(f"Problem reading file {role_name}. Is file empty?")
             # Some roles do not have this key
             if "includedPermissions" in role_file:
                 role_perms = role_file["includedPermissions"]
