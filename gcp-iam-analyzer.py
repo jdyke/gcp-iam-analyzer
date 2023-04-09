@@ -8,8 +8,10 @@ import tarfile
 import sys
 import shutil
 import json
-from pprint import pprint
 import re
+
+from pprint import pprint
+from tqdm import tqdm
 
 
 def inputs(args):
@@ -135,9 +137,10 @@ def perms_shared(shared_roles):
 
     # Compare the two lists and display similarities
     shared_perms = set(role_one_perms) & set(role_two_perms)
+    number_of_shared_perms = len(shared_perms)
     if shared_perms:
         print(
-            f"\n # The shared permissions between {role_one} and {role_two} are: \n")
+            f"\n # There are {number_of_shared_perms} shared permissions between {role_one} and {role_two}: \n")
         for perms in shared_perms:
             pprint(perms)
     else:
@@ -195,6 +198,10 @@ def roles_refresh():
     move_dir = "gcp_iam_update_bot-" + tarball_name
     move_directory(move_dir)
 
+    # Tell user number of roles found
+    number_of_roles_extracted =  len(os.listdir('./roles'))
+    print(f"Number of roles found: {number_of_roles_extracted} \n")
+
 
 def list_perms(list_roles):
     """
@@ -208,7 +215,8 @@ def list_perms(list_roles):
     # Find the permissions
     for role in list_roles:
         perms_list = get_permissions(role)
-        print(f"# The permissions for {role} are:")
+        number_of_perms = len(perms_list)
+        print(f"# There are {number_of_perms} permissions for {role}:")
         for perm in perms_list:
             pprint(perm)
 
@@ -240,8 +248,11 @@ def list_roles_for_perm(role_permission):
     # Empty list which we will add roles with permission to
     roles_with_perm = []
 
+    # Count total number of roles to use in logging
+    number_of_roles_extracted =  len(os.listdir('./roles'))
+
     # For each role name in our roles/ directory
-    for role_name in all_roles_names:
+    for role_name in tqdm(all_roles_names, desc=f"Searching {number_of_roles_extracted} roles:", colour="green" ):
         # We first get the list of permissions in the role
         role_perms = get_permissions(role_name)
         # Then we check for the specific permission in the list
@@ -250,7 +261,8 @@ def list_roles_for_perm(role_permission):
 
     # If there are roles with the specific permission
     if roles_with_perm:
-        print(f"\n # The roles with the \"{role_permission}\" permission are: \n")
+        number_of_roles_with_perm = len(roles_with_perm)
+        print(f"\n # There are {number_of_roles_with_perm} roles with the \"{role_permission}\" permission: \n")
         for role in roles_with_perm:
             pprint(role)
     else:
