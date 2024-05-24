@@ -280,6 +280,7 @@ def list_roles_for_perm(role_permission):
 
     # If there are roles with the specific permission
     if roles_with_perm:
+        roles_with_perm.sort()
         number_of_roles_with_perm = len(roles_with_perm)
         print(f"\n # There are {number_of_roles_with_perm} roles with the \"{role_permission}\" permission: \n")
         for role in roles_with_perm:
