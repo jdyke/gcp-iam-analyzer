@@ -81,18 +81,17 @@ def perms_diff(diff_roles):
         role_one_diff = "N/A"
         pprint(role_one_diff)
     else:
-        for permission in role_one_diff:
+        for permission in sorted(role_one_diff):
             pprint(permission)
 
     # Get the diff for role2
     role_two_diff = set(role_two_perms).difference(set(role_one_perms))
-
     print(f"\n # Role \"{role_two}\" differences:")
     if not role_two_diff:
         role_two_diff = "N/A"
         pprint(role_two_diff)
     else:
-        for permission in role_two_diff:
+        for permission in sorted(role_two_diff):
             pprint(permission)
 
 
@@ -141,7 +140,7 @@ def perms_shared(shared_roles):
     if shared_perms:
         print(
             f"\n # There are {number_of_shared_perms} shared permissions between {role_one} and {role_two}: \n")
-        for perms in shared_perms:
+        for perms in sorted(shared_perms):
             pprint(perms)
     else:
         print("\n There are no shared permissions.")
